@@ -12,27 +12,25 @@ const firebaseConfig = {
 // Initialize Firebase (same as before)
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js';
 import { getDatabase, ref, onValue, set, get, remove } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js';
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
-
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
-
 const auth = getAuth(app);
-
-signInAnonymously(auth)
-.then(() => {
-    //signed in
-    console.log("User signed in anonymously");
-})
-.catch((error) => {
-    console.error("Error signing in anonymously: ", error);
-});
 
 let currentRoomId = null;
 let currentUserId = null;
 let roomRef = null;
 let isCreator = false;
+
+// Authenticate Anonymously
+signInAnonymously(auth)
+  .then(() => {
+    console.log("User signed in anonymously");
+  })
+  .catch((error) => {
+    console.error("Error signing in anonymously: ", error);
+  });
 
 function joinRoom() {
   const roomIdInput = document.getElementById('roomId');
@@ -90,6 +88,19 @@ function joinRoom() {
 }
 
 document.getElementById('joinRoomButton').addEventListener('click', joinRoom);
+
+// Add event listener for Enter key press on input fields
+document.getElementById('roomId').addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    joinRoom();
+  }
+});
+
+document.getElementById('userId').addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    joinRoom();
+  }
+});
 
 function getRoomIdFromUrl() {
   const urlParams = new URLSearchParams(window.location.search);
