@@ -373,7 +373,7 @@ if (roomIdFromUrl) {
 }
 
 function handleCheckboxEnter(event) {
-  if (event.key === 'Enter') {
+  if (event.key === 'Enter' || event.key === ' ') { // Check for Enter OR Space
     event.preventDefault();
     event.target.checked = !event.target.checked;
     const changeEvent = new Event('change', { bubbles: true });
