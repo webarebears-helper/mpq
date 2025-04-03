@@ -372,28 +372,21 @@ if (roomIdFromUrl) {
   document.querySelector('.room-page').style.display = 'none';
 }
 
-function handleCheckboxEnter(event) {
-  if (event.key === 'Enter') {
+function handleDocumentEnter(event) {
+  if (event.key === 'Enter' && document.activeElement.type === 'checkbox') {
     event.preventDefault();
-    event.target.checked = !event.target.checked;
+    document.activeElement.checked = !document.activeElement.checked;
     const changeEvent = new Event('change', { bubbles: true });
-    event.target.dispatchEvent(changeEvent);
+    document.activeElement.dispatchEvent(changeEvent);
+  } else if (event.key === ' ' && document.activeElement.type === 'checkbox'){
+    event.preventDefault();
+    document.activeElement.checked = !document.activeElement.checked;
+    const changeEvent = new Event('change', { bubbles: true });
+    document.activeElement.dispatchEvent(changeEvent);
   }
 }
 
-// Attach event listeners to all checkboxes
+// Attach event listener to the document
 document.addEventListener('DOMContentLoaded', function() {
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-  checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('keypress', handleCheckboxEnter); // Use keypress event
-    checkbox.addEventListener('keydown', (event) => { //add spacebar support.
-        if (event.key === " "){
-            event.preventDefault();
-            event.target.checked = !event.target.checked;
-            const changeEvent = new Event('change', { bubbles: true });
-            event.target.dispatchEvent(changeEvent);
-        }
-    });
-
-  });
+  document.addEventListener('keydown', handleDocumentEnter);
 });
