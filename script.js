@@ -373,7 +373,7 @@ if (roomIdFromUrl) {
 }
 
 function handleCheckboxEnter(event) {
-  if (event.key === 'Enter' || event.key === ' ') { // Check for Enter OR Space
+  if (event.key === 'Enter') {
     event.preventDefault();
     event.target.checked = !event.target.checked;
     const changeEvent = new Event('change', { bubbles: true });
@@ -385,6 +385,15 @@ function handleCheckboxEnter(event) {
 document.addEventListener('DOMContentLoaded', function() {
   const checkboxes = document.querySelectorAll('input[type="checkbox"]');
   checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('keydown', handleCheckboxEnter);
+    checkbox.addEventListener('keypress', handleCheckboxEnter); // Use keypress event
+    checkbox.addEventListener('keydown', (event) => { //add spacebar support.
+        if (event.key === " "){
+            event.preventDefault();
+            event.target.checked = !event.target.checked;
+            const changeEvent = new Event('change', { bubbles: true });
+            event.target.dispatchEvent(changeEvent);
+        }
+    });
+
   });
 });
