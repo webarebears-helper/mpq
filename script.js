@@ -121,23 +121,19 @@ function createPlatformUI() {
   document.getElementById('clearRoomButton').style.display = 'block';
   showCreatorButtons();
 
-  // Create the button container.
   const buttonContainer = document.createElement('div');
   buttonContainer.classList.add('button-container');
 
-  // Get the buttons.
   const clearButton = document.getElementById('clearRoomButton');
   const closeButton = document.getElementById('closeRoomButton');
 
-  // Append the buttons to the button container.
   buttonContainer.appendChild(clearButton);
   buttonContainer.appendChild(closeButton);
 
-  // Append the button container to the room-page BEFORE the table.
   document.querySelector('.room-page').insertBefore(buttonContainer, platformTableBody);
 
   const headerRow = document.createElement('tr');
-    headerRow.style.backgroundColor = '#f2f2f2'; //added inline style.
+  headerRow.style.backgroundColor = '#f2f2f2';
   const platformHeader = document.createElement('th');
   platformHeader.textContent = 'Platforms';
   headerRow.appendChild(platformHeader);
@@ -221,19 +217,18 @@ function updateUserCells(users) {
       row.classList.add('even-row');
     } else {
       row.classList.add('odd-row');
-      row.style.backgroundColor = '#f2f2f2'; // Set background color immediately
+      row.style.backgroundColor = '#f2f2f2';
     }
-   //Add event listeners for the hover effect
+
     row.addEventListener('mouseover', () => {
-        row.style.backgroundColor = '#e2e2e2';
+      row.style.backgroundColor = '#e2e2e2';
     });
     row.addEventListener('mouseout', () => {
-        if (index % 2 === 0){
-            row.style.backgroundColor = 'white';
-        } else {
-            row.style.backgroundColor = '#f2f2f2';
-        }
-
+      if (index % 2 === 0) {
+        row.style.backgroundColor = 'white';
+      } else {
+        row.style.backgroundColor = '#f2f2f2';
+      }
     });
   });
 }
@@ -249,13 +244,12 @@ function setupRoomListener() {
       }
     });
 
-    // Listen for room deletion
     const roomDeletionRef = ref(database, `rooms/${currentRoomId}`);
     onValue(roomDeletionRef, (snapshot) => {
       if (!snapshot.exists()) {
-        if (!isCreator){ //only redirect if the user is not the creator.
+        if (!isCreator) {
           alert('Room closed by creator!');
-          window.location.href = 'https://webarebears-helper.github.io/mpq'; // Redirect
+          window.location.href = 'https://webarebears-helper.github.io/mpq';
         }
       }
     });
@@ -355,7 +349,7 @@ function closeRoom() {
     remove(ref(database, `rooms/${currentRoomId}`))
       .then(() => {
         alert('Room closed!');
-        window.location.href = 'https://webarebears-helper.github.io/mpq'; // Corrected URL
+        window.location.href = 'https://webarebears-helper.github.io/mpq';
       })
       .catch((error) => {
         console.error('Error closing room:', error);
@@ -377,3 +371,20 @@ if (roomIdFromUrl) {
   document.getElementById('platforms').style.display = 'none';
   document.querySelector('.room-page').style.display = 'none';
 }
+
+function handleCheckboxEnter(event) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    event.target.checked = !event.target.checked;
+    const changeEvent = new Event('change', { bubbles: true });
+    event.target.dispatchEvent(changeEvent);
+  }
+}
+
+// Attach event listeners to all checkboxes
+document.addEventListener('DOMContentLoaded', function() {
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('keydown', handleCheckboxEnter);
+  });
+});
