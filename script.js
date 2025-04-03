@@ -16,6 +16,19 @@ import { getDatabase, ref, onValue, set, get, remove } from 'https://www.gstatic
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+
+const auth = getAuth(app);
+
+signInAnonymously(auth)
+.then(() => {
+    //signed in
+    console.log("User signed in anonymously");
+})
+.catch((error) => {
+    console.error("Error signing in anonymously: ", error);
+});
+
 let currentRoomId = null;
 let currentUserId = null;
 let roomRef = null;
